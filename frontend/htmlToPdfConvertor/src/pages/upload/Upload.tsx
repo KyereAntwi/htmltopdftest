@@ -28,6 +28,8 @@ export default function Upload() {
       if (file.type !== 'text/html') {
         setError('Please upload a valid HTML file.');
         return;
+      } else {
+        setError('');
       }
 
       const newFormData = new FormData();

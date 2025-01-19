@@ -10,5 +10,9 @@ export default function useUploadFile(setError: (error: string) => void) {
     onError: (error: Error) => {
       setError(error.message);
     },
+
+    onSuccess: () => {
+      setError('');
+    },
   });
 }
