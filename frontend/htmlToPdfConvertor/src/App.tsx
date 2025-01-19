@@ -1,7 +1,7 @@
-import './App.css';
+import Upload from './pages/upload/Upload';
 
 function App() {
-  return <></>;
+  return <Upload />;
 }
 
 export default App;
