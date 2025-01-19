@@ -23,8 +23,15 @@ export default function Upload() {
     const files = event.target.files;
 
     if (files) {
+      const file = files[0];
+
+      if (file.type !== 'text/html') {
+        setError('Please upload a valid HTML file.');
+        return;
+      }
+
       const newFormData = new FormData();
-      newFormData.append('htmlFile', files[0]);
+      newFormData.append('htmlFile', file);
       uploadMutation.mutateAsync(newFormData);
 
       if (fileInputRef.current) {
