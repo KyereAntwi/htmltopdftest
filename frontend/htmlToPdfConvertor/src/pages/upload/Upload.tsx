@@ -1,5 +1,5 @@
 import { ColorModeButton } from '@/components/ui/color-mode';
-import { upload } from '@/services/uploadService';
+import useUploadFile from '@/hooks/useUploadFile';
 import {
   Flex,
   Box,
@@ -9,15 +9,27 @@ import {
   Button,
   Text,
 } from '@chakra-ui/react';
+import { useRef, useState } from 'react';
 
 export default function Upload() {
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const [error, setError] = useState<string>('');
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const uploadMutation = useUploadFile(setError);
+
+  const handleFileUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const files = event.target.files;
 
     if (files) {
       const newFormData = new FormData();
       newFormData.append('htmlFile', files[0]);
-      upload(newFormData);
+      uploadMutation.mutateAsync(newFormData);
+
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
     }
   };
 
@@ -64,13 +76,24 @@ export default function Upload() {
 
         <HStack width={'full'} justifyContent={'center'} alignItems={'center'}>
           <Input
+            ref={fileInputRef}
             type='file'
             as={Button}
             variant='outline'
             size='sm'
             accept='.html'
             onChange={handleFileUpload}
+            disabled={uploadMutation.isPending}
           ></Input>
+        </HStack>
+
+        <HStack width={'full'} justifyContent={'center'} alignItems={'center'}>
+          {error != '' && <Text color={'red'}>{error}</Text>}
+          {uploadMutation.isPending && (
+            <Text color={'green'} fontWeight={'bold'}>
+              we are uploading your file for processing ...
+            </Text>
+          )}
         </HStack>
       </Box>
     </Flex>
