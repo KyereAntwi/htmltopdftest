@@ -1,0 +1,6 @@
+@HTMLToPDFConvertor.Api_HostAddress = https://localhost:7164
+
+POST https://localhost:7164/api/convert
+Accept: application/json
+
+###
